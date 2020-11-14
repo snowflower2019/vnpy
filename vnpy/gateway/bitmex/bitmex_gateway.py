@@ -265,6 +265,7 @@ class BitmexRestApi(RestClient):
             "ordType": ORDERTYPE_VT2BITMEX[req.type],
             "orderQty": int(req.volume),
             "clOrdID": orderid,
+            "execInst": "ParticipateDoNotInitiate"
         }
 
         inst = []   # Order special instructions

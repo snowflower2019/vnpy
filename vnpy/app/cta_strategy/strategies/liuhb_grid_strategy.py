@@ -73,6 +73,9 @@ class LiuhbGridStrategy(CtaTemplate):
         self.ask_price = tick.ask_price_1
         self.bid_price = tick.bid_price_1
 
+        if abs(self.pos) >= self.Lot_max:
+            return
+
         if self.vt_orderid:
             self.cancel_all()
 

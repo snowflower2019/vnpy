@@ -16,6 +16,7 @@ class LiuhbGridAlgo(AlgoTemplate):
         "step_price": 0.0,
         "step_volume": 0,
         "interval": 10,
+        "max_pos": 2000
     }
 
     variables = [
@@ -39,6 +40,7 @@ class LiuhbGridAlgo(AlgoTemplate):
         self.step_price = setting["step_price"]
         self.step_volume = setting["step_volume"]
         self.interval = setting["interval"]
+        self.max_pos = setting["max_pos"]
 
         # Variables
         self.timer_count = 0
@@ -73,6 +75,9 @@ class LiuhbGridAlgo(AlgoTemplate):
     def on_timer(self):
         """"""
         if not self.last_tick:
+            return
+
+        if abs(self.pos) >= self.max_pos:
             return
 
         self.timer_count += 1
