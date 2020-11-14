@@ -100,18 +100,12 @@ class LiuhbGridAlgo(AlgoTemplate):
 
         # Buy when price dropping
         if target_buy_volume > 0:
-            self.vt_orderid = self.buy(
-                self.vt_symbol,
-                self.last_tick.ask_price_1 - 0.5,
-                min(target_buy_volume, self.last_tick.ask_volume_1)
-            )
+            print('current pos is {}'.format(self.pos))
+            self.vt_orderid = self.buy(self.vt_symbol, self.last_tick.ask_price_1 - 0.5, min(target_buy_volume, self.last_tick.ask_volume_1))
         # Sell when price rising
         elif target_sell_volume > 0:
-            self.vt_orderid = self.sell(
-                self.vt_symbol,
-                self.last_tick.bid_price_1 + 0.5,
-                min(target_sell_volume, self.last_tick.bid_volume_1)
-            )
+            print('current pos is {}'.format(self.pos))
+            self.vt_orderid = self.sell(self.vt_symbol, self.last_tick.bid_price_1 + 0.5, min(target_sell_volume, self.last_tick.bid_volume_1))
 
         # Update UI
         self.put_variables_event()
