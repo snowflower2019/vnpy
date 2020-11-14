@@ -59,6 +59,7 @@ class AlgoEngine(BaseEngine):
         from .algos.stop_algo import StopAlgo
         from .algos.best_limit_algo import BestLimitAlgo
         from .algos.grid_algo import GridAlgo
+        from .algos.liuhb_grid_algo import LiuhbGridAlgo
         from .algos.dma_algo import DmaAlgo
         from .algos.arbitrage_algo import ArbitrageAlgo
 
@@ -70,6 +71,7 @@ class AlgoEngine(BaseEngine):
         self.add_algo_template(GridAlgo)
         self.add_algo_template(DmaAlgo)
         self.add_algo_template(ArbitrageAlgo)
+        self.add_algo_template(LiuhbGridAlgo)
 
         from .genus import (
             GenusVWAP,
