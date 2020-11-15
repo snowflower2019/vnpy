@@ -16,6 +16,7 @@ class LiuhbGridAlgo(AlgoTemplate):
         "step_price": 0.0,
         "step_volume": 0,
         "interval": 10,
+        "pos": 0,
         "max_pos": 2000
     }
 
@@ -45,7 +46,7 @@ class LiuhbGridAlgo(AlgoTemplate):
         # Variables
         self.timer_count = 0
         self.vt_orderid = ""
-        self.pos = 0
+        self.pos = setting["pos"]
         self.last_tick = None
         self.prices = []
 
@@ -68,9 +69,8 @@ class LiuhbGridAlgo(AlgoTemplate):
             for i in range(len(self.prices)):
                 sums = sums + self.prices[i]
             my_price = sums / len(self.prices)
-            if abs((my_price - self.price) / self.price) >= 0.01:
+            if abs((my_price - self.price) / self.price) >= 0.006:
                 self.price = my_price
-                print('avg price is {}'.format(self.price))
 
     def on_timer(self):
         """"""
@@ -90,26 +90,21 @@ class LiuhbGridAlgo(AlgoTemplate):
             self.cancel_all()
 
         # Calculate target volume to buy and sell
-        target_buy_distance = (
-            self.price - self.last_tick.ask_price_1) / self.step_price
-        target_buy_position = math.floor(
-            target_buy_distance) * self.step_volume
+        target_buy_distance = (self.price - self.last_tick.ask_price_1) / self.step_price
+        target_buy_position = math.floor(target_buy_distance) * self.step_volume
         target_buy_volume = target_buy_position - self.pos
 
         # Calculate target volume to sell
-        target_sell_distance = (
-            self.price - self.last_tick.bid_price_1) / self.step_price
-        target_sell_position = math.ceil(
-            target_sell_distance) * self.step_volume
+        target_sell_distance = (self.price - self.last_tick.bid_price_1) / self.step_price
+        target_sell_position = math.ceil(target_sell_distance) * self.step_volume
         target_sell_volume = self.pos - target_sell_position
 
+        print('参考价{} 买数量{} 卖数量{} 当前仓位{} '.format(self.price, target_buy_volume, target_sell_volume, self.pos))
         # Buy when price dropping
         if target_buy_volume > 0:
-            print('current pos is {}'.format(self.pos))
             self.vt_orderid = self.buy(self.vt_symbol, self.last_tick.ask_price_1 - 0.5, min(target_buy_volume, self.last_tick.ask_volume_1))
         # Sell when price rising
         elif target_sell_volume > 0:
-            print('current pos is {}'.format(self.pos))
             self.vt_orderid = self.sell(self.vt_symbol, self.last_tick.bid_price_1 + 0.5, min(target_sell_volume, self.last_tick.bid_volume_1))
 
         # Update UI
